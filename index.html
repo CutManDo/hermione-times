@@ -53,6 +53,10 @@
             margin-bottom: 10px;
         }
         
+        .voldemort-img {
+            border-color: #2A623D;
+        }
+        
         .question-container {
             background-color: #f8f3e6;
             padding: 15px;
@@ -77,10 +81,19 @@
             cursor: pointer;
             font-size: 16px;
             transition: all 0.3s;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            user-select: none;
+            -webkit-user-select: none;
         }
         
         .option-btn:hover {
             background-color: #9A1A13;
+        }
+        
+        .option-btn:active {
+            transform: scale(0.98);
         }
         
         .next-btn, .start-btn {
@@ -94,10 +107,53 @@
             font-size: 16px;
             font-weight: bold;
             transition: all 0.3s;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            user-select: none;
+            -webkit-user-select: none;
         }
         
         .next-btn:hover, .start-btn:hover {
             background-color: #EEBA30;
+        }
+        
+        .next-btn:active, .start-btn:active {
+            transform: scale(0.98);
+        }
+        
+        /* סגנון לשדה הזנת מספר */
+        .answer-input {
+            font-size: 18px;
+            padding: 12px;
+            border: 2px solid #2A623D;
+            border-radius: 8px;
+            text-align: center;
+            width: 120px;
+            margin: 15px auto;
+            display: block;
+        }
+        
+        .submit-btn {
+            background-color: #2A623D;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 12px 25px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+        }
+        
+        .submit-btn:hover {
+            background-color: #1D7551;
+        }
+        
+        .submit-btn:active {
+            transform: scale(0.98);
         }
         
         .progress-bar {
@@ -154,6 +210,15 @@
             margin-bottom: 10px;
         }
         
+        .voldemort-screen {
+            background-color: #0D0D0D;
+            color: #E0E0E0;
+        }
+        
+        .voldemort-screen .stage-title {
+            color: #2A623D;
+        }
+        
         /* Responsive design */
         @media (max-width: 600px) {
             .options-container {
@@ -163,6 +228,13 @@
             .character-img {
                 width: 120px;
                 height: 120px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .start-btn, .next-btn {
+                width: 80%;
+                max-width: 300px;
             }
         }
     </style>
@@ -177,7 +249,7 @@
             <h2>ברוכים הבאים לעולם הקסום של לוח הכפל!</h2>
             <p class="stage-description">
                 הרמיוני צריכה את עזרתך כדי לעבור את האתגרים המתמטיים בהוגוורטס.
-                עזרי לה לענות על שאלות כפל ולסיים את כל ארבעת השלבים!
+                עזרי לה לענות על שאלות כפל ולסיים את כל חמשת השלבים!
             </p>
             <button id="start-game-btn" class="start-btn">התחילי במשחק!</button>
         </div>
@@ -219,10 +291,21 @@
             <h2 class="stage-title">שלב 4: קרב הכישופים</h2>
             <p class="stage-description">
                 בלטריקס לסטריינג' מאתגרת אותך לקרב כישופים!
-                זהו השלב הקשה ביותר - עליך לענות על 7 שאלות קשות.
+                זהו שלב קשה - עליך לענות על 7 שאלות קשות.
                 שימי לב - אם תטעי אפילו פעם אחת, תפסידי את המשחק!
             </p>
             <button class="start-btn stage-start-btn" data-stage="4">התחילי!</button>
+        </div>
+        
+        <div id="stage5-intro" class="screen voldemort-screen">
+            <img src="images/voldemort.jpg" alt="וולדמורט" class="character-img voldemort-img">
+            <h2 class="stage-title">שלב 5: העימות הסופי</h2>
+            <p class="stage-description">
+                מי שלא יכולים לנקוב בשמו מאתגר אותך לקרב מוחות!
+                שלב זה הוא הקשה ביותר - עליך לפתור 5 תרגילי כפל ולהקליד את התוצאה המדויקת.
+                אין אפשרות לטעות!
+            </p>
+            <button class="start-btn stage-start-btn" data-stage="5">התחילי!</button>
         </div>
         
         <!-- Stage Completion Screens -->
@@ -253,10 +336,21 @@
             <h2 class="stage-title">הצלחת!</h2>
             <p class="stage-description">
                 יופי! הצלחת למצוא את חדר הנחיצות.
-                עכשיו מחכה לך האתגר הגדול ביותר - קרב כישופים מול בלטריקס לסטריינג'!
+                עכשיו מחכה לך האתגר הבא - קרב כישופים מול בלטריקס לסטריינג'!
                 זה יהיה קשה, אבל אנחנו מאמינים בך.
             </p>
             <button class="next-btn">לשלב הבא</button>
+        </div>
+        
+        <div id="stage4-complete" class="screen">
+            <img src="images/hermione1.jpg" alt="הרמיוני" class="character-img">
+            <h2 class="stage-title">הצלחת!</h2>
+            <p class="stage-description">
+                כל הכבוד, הרמיוני! ניצחת את בלטריקס בקרב הכישופים.
+                אבל המשימה האחרונה והקשה ביותר עוד לפנייך -
+                עימות ישיר מול זה-שאין-לנקוב-בשמו!
+            </p>
+            <button class="next-btn">לשלב הסופי</button>
         </div>
         
         <!-- Game Screens -->
@@ -280,12 +374,34 @@
             <div id="feedback" class="feedback"></div>
         </div>
         
+        <!-- Game Screen for Voldemort (Stage 5) -->
+        <div id="voldemort-game-screen" class="screen voldemort-screen">
+            <div id="voldemort-character-info">
+                <img src="images/voldemort.jpg" alt="וולדמורט" class="character-img voldemort-img">
+                <h2>וולדמורט</h2>
+            </div>
+            
+            <div class="progress-bar">
+                <div class="progress" id="voldemort-stage-progress"></div>
+            </div>
+            
+            <div class="question-container">
+                <h3 id="voldemort-question-text">שאלה</h3>
+                <div class="answer-container">
+                    <input type="number" id="answer-input" class="answer-input" placeholder="הקלידי תשובה" min="0">
+                    <button id="submit-answer" class="submit-btn">שלחי</button>
+                </div>
+            </div>
+            
+            <div id="voldemort-feedback" class="feedback"></div>
+        </div>
+        
         <!-- Final Screens -->
         <div id="win-screen" class="screen">
-            <img src="images/Hermione.win.jpg" alt="הרמיוני מנצחת" class="character-img">
+            <img src="images/hermione.win.jpg" alt="הרמיוני מנצחת" class="character-img">
             <h2 class="stage-title">ניצחון מזהיר!</h2>
             <p class="stage-description">
-                כל הכבוד, הרמיוני! ניצחת את בלטריקס בקרב הכישופים
+                כל הכבוד, הרמיוני! ניצחת את בלטריקס ואפילו את וולדמורט בקרב מוחות
                 והוכחת שאת המכשפה החכמה ביותר בהוגוורטס!
                 אלבוס דמבלדור מעניק לך מחולל זמן, שמאפשר לך לחזור ולשחק שוב את המשחק מהתחלה!
             </p>
@@ -297,7 +413,7 @@
             <img src="images/hermione.lose.jpg" alt="הרמיוני מפסידה" class="character-img">
             <h2 class="stage-title">הפסדת בקרב...</h2>
             <p class="stage-description">
-                נראה שבלטריקס הייתה חזקה מדי הפעם.
+                נראה שהיריב היה חזק מדי הפעם.
                 אל דאגה, הרמיוני! את יכולה לנסות שוב ולהוכיח
                 שאת המכשפה החכמה ביותר בהוגוורטס!
             </p>
@@ -314,12 +430,14 @@
             totalCorrect: 0,
             questionsPerStage: 5,
             stage4Questions: 7,
-            lastQuestion: null, // משתנה חדש לשמירת השאלה האחרונה
+            stage5Questions: 5,
+            lastQuestion: null, // משתנה לשמירת השאלה האחרונה
             characters: [
                 { name: "הגברת השמנה", img: "images/fatlady.jpg" },
                 { name: "דראקו מאלפוי", img: "images/draco.jpg" },
                 { name: "חדר הנחיצות", img: "images/room.jpg" },
-                { name: "בלטריקס לסטריינג'", img: "images/bellatrix.jpg" }
+                { name: "בלטריקס לסטריינג'", img: "images/bellatrix.jpg" },
+                { name: "וולדמורט", img: "images/voldemort.jpg" }
             ]
         };
         
@@ -330,10 +448,13 @@
             stage2Intro: document.getElementById('stage2-intro'),
             stage3Intro: document.getElementById('stage3-intro'),
             stage4Intro: document.getElementById('stage4-intro'),
+            stage5Intro: document.getElementById('stage5-intro'),
             stage1Complete: document.getElementById('stage1-complete'),
             stage2Complete: document.getElementById('stage2-complete'),
             stage3Complete: document.getElementById('stage3-complete'),
+            stage4Complete: document.getElementById('stage4-complete'),
             game: document.getElementById('game-screen'),
+            voldemortGame: document.getElementById('voldemort-game-screen'),
             win: document.getElementById('win-screen'),
             lose: document.getElementById('lose-screen')
         };
@@ -342,29 +463,98 @@
         const characterImg = document.getElementById('current-character-img');
         const characterName = document.getElementById('character-name');
         const questionText = document.getElementById('question-text');
+        const voldemortQuestionText = document.getElementById('voldemort-question-text');
         const optionsContainer = document.getElementById('options');
+        const answerInput = document.getElementById('answer-input');
+        const submitAnswerBtn = document.getElementById('submit-answer');
         const feedback = document.getElementById('feedback');
+        const voldemortFeedback = document.getElementById('voldemort-feedback');
         const progressBar = document.getElementById('stage-progress');
+        const voldemortProgressBar = document.getElementById('voldemort-stage-progress');
         const finalScore = document.getElementById('final-score');
         
-        // Add event listeners
-        document.getElementById('start-game-btn').addEventListener('click', startStage1Intro);
-        document.querySelectorAll('.stage-start-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                const stage = parseInt(btn.dataset.stage);
-                startStage(stage);
+        // Add event listeners - improved for better cross-browser compatibility
+        document.addEventListener('DOMContentLoaded', function() {
+            // טיפול בכפתור הפתיחה
+            const startGameBtn = document.getElementById('start-game-btn');
+            if (startGameBtn) {
+                startGameBtn.addEventListener('click', function(e) {
+                    startStage1Intro();
+                });
+                
+                startGameBtn.addEventListener('touchstart', function(e) {
+                    e.preventDefault();
+                    startStage1Intro();
+                });
+            }
+            
+            // טיפול בכפתורי התחלת שלב
+            document.querySelectorAll('.stage-start-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const stage = parseInt(this.dataset.stage);
+                    startStage(stage);
+                });
+                
+                btn.addEventListener('touchstart', function(e) {
+                    e.preventDefault();
+                    const stage = parseInt(this.dataset.stage);
+                    startStage(stage);
+                });
             });
-        });
-        
-        document.querySelectorAll('.next-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                gameState.currentStage++;
-                showNextStageIntro();
+            
+            // טיפול בכפתורי המשך לשלב הבא
+            document.querySelectorAll('.next-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    gameState.currentStage++;
+                    showNextStageIntro();
+                });
+                
+                btn.addEventListener('touchstart', function(e) {
+                    e.preventDefault();
+                    gameState.currentStage++;
+                    showNextStageIntro();
+                });
             });
+            
+            // טיפול בכפתורי ניסיון חוזר
+            const playAgainBtn = document.getElementById('play-again-btn');
+            if (playAgainBtn) {
+                playAgainBtn.addEventListener('click', resetGame);
+                playAgainBtn.addEventListener('touchstart', function(e) {
+                    e.preventDefault();
+                    resetGame();
+                });
+            }
+            
+            const tryAgainBtn = document.getElementById('try-again-btn');
+            if (tryAgainBtn) {
+                tryAgainBtn.addEventListener('click', resetGame);
+                tryAgainBtn.addEventListener('touchstart', function(e) {
+                    e.preventDefault();
+                    resetGame();
+                });
+            }
+            
+            // טיפול בכפתור שליחת תשובה לוולדמורט
+            const submitAnswer = document.getElementById('submit-answer');
+            if (submitAnswer) {
+                submitAnswer.addEventListener('click', checkVoldemortAnswer);
+                submitAnswer.addEventListener('touchstart', function(e) {
+                    e.preventDefault();
+                    checkVoldemortAnswer();
+                });
+            }
+            
+            // טיפול בהקשת Enter בשדה התשובה של וולדמורט
+            const answerInputField = document.getElementById('answer-input');
+            if (answerInputField) {
+                answerInputField.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        checkVoldemortAnswer();
+                    }
+                });
+            }
         });
-        
-        document.getElementById('play-again-btn').addEventListener('click', resetGame);
-        document.getElementById('try-again-btn').addEventListener('click', resetGame);
         
         // Function to show a specific screen and hide all others
         function showScreen(screenToShow) {
@@ -394,6 +584,9 @@
                 case 4:
                     showScreen(screens.stage4Intro);
                     break;
+                case 5:
+                    showScreen(screens.stage5Intro);
+                    break;
             }
         }
         
@@ -404,10 +597,18 @@
             gameState.correctAnswers = 0;
             gameState.lastQuestion = null; // איפוס השאלה האחרונה בתחילת שלב חדש
             
-            updateCharacterInfo();
-            updateProgress();
-            generateQuestion();
-            showScreen(screens.game);
+            if (stage === 5) {
+                // שלב וולדמורט
+                updateVoldemortProgress();
+                generateVoldemortQuestion();
+                showScreen(screens.voldemortGame);
+            } else {
+                // שלבים רגילים
+                updateCharacterInfo();
+                updateProgress();
+                generateQuestion();
+                showScreen(screens.game);
+            }
         }
         
         // Update character info based on current stage
@@ -417,14 +618,20 @@
             characterName.textContent = character.name;
         }
         
-        // Update progress bar
+        // Update progress bar for regular stages
         function updateProgress() {
             const requiredQuestions = gameState.currentStage === 4 ? gameState.stage4Questions : gameState.questionsPerStage;
             const progress = (gameState.correctAnswers / requiredQuestions) * 100;
             progressBar.style.width = `${progress}%`;
         }
         
-        // פונקציה חדשה לבדיקה אם מספר הוא כפולה של 1 או 10
+        // Update progress bar for Voldemort stage
+        function updateVoldemortProgress() {
+            const progress = (gameState.correctAnswers / gameState.stage5Questions) * 100;
+            voldemortProgressBar.style.width = `${progress}%`;
+        }
+        
+        // פונקציה לבדיקה אם מספר הוא כפולה של 1 או 10
         function isMultipleOf1Or10(num) {
             return num === 1 || num === 10 || num % 10 === 0;
         }
@@ -469,137 +676,4 @@
                     continue; // אם כן, נמשיך ללולאה הבאה וניצור שאלה חדשה
                 }
                 
-                // אם הגענו לכאן, השאלה תקינה
-                isValidQuestion = true;
-                // שמירת השאלה הנוכחית כשאלה האחרונה לסיבוב הבא
-                gameState.lastQuestion = questionKey;
-            }
-            
-            const correctAnswer = num1 * num2;
-            
-            // Create answer options (including the correct one)
-            const options = [correctAnswer];
-            
-            // Add 3 incorrect options
-            while (options.length < 4) {
-                let wrong;
-                if (gameState.currentStage >= 3) { // שלב 3 ו-4 משתמשים באותה רמת קושי של תשובות שגויות
-                    // More challenging wrong answers for stage 3 and 4
-                    const operation = Math.random() < 0.5 ? '+' : '-';
-                    const diff = Math.floor(Math.random() * 3) + 1;
-                    wrong = operation === '+' ? correctAnswer + diff : correctAnswer - diff;
-                } else {
-                    wrong = Math.floor(Math.random() * 20) + (correctAnswer - 10);
-                    // Ensure wrong answers are positive and not equal to the correct answer
-                    if (wrong <= 0 || wrong === correctAnswer) {
-                        wrong = correctAnswer + Math.floor(Math.random() * 5) + 1;
-                    }
-                }
-                
-                if (!options.includes(wrong)) {
-                    options.push(wrong);
-                }
-            }
-            
-            // Shuffle options
-            const shuffledOptions = options.sort(() => Math.random() - 0.5);
-            
-            // Update the UI
-            questionText.textContent = `כמה זה ${num1} × ${num2}?`;
-            optionsContainer.innerHTML = '';
-            
-            shuffledOptions.forEach(option => {
-                const button = document.createElement('button');
-                button.classList.add('option-btn');
-                button.textContent = option;
-                button.addEventListener('click', () => checkAnswer(option, correctAnswer));
-                optionsContainer.appendChild(button);
-            });
-            
-            feedback.textContent = '';
-        }
-        
-        // Check if the answer is correct
-        function checkAnswer(selectedAnswer, correctAnswer) {
-            if (selectedAnswer === correctAnswer) {
-                // Correct answer
-                feedback.textContent = 'נכון מאוד!';
-                feedback.className = 'feedback correct';
-                gameState.correctAnswers++;
-                gameState.totalCorrect++;
-                updateProgress();
-                
-                // Check if stage is complete
-                const requiredQuestions = gameState.currentStage === 4 ? gameState.stage4Questions : gameState.questionsPerStage;
-                if (gameState.correctAnswers >= requiredQuestions) {
-                    setTimeout(() => {
-                        completeStage();
-                    }, 1000);
-                } else {
-                    setTimeout(() => {
-                        generateQuestion();
-                    }, 1000);
-                }
-            } else {
-                // Wrong answer
-                feedback.textContent = `לא נכון... התשובה היא ${correctAnswer}`;
-                feedback.className = 'feedback wrong';
-                
-                // In stage 4, any wrong answer ends the game
-                if (gameState.currentStage === 4) {
-                    setTimeout(() => {
-                        showScreen(screens.lose);
-                    }, 1500);
-                } else {
-                    // In other stages, reset progress
-                    gameState.correctAnswers = 0;
-                    updateProgress();
-                    setTimeout(() => {
-                        generateQuestion();
-                    }, 1500);
-                }
-            }
-            
-            // Disable all option buttons temporarily
-            document.querySelectorAll('.option-btn').forEach(btn => {
-                btn.disabled = true;
-                
-                // If this is the selected button, add visual indication
-                if (parseInt(btn.textContent) === selectedAnswer) {
-                    btn.style.backgroundColor = selectedAnswer === correctAnswer ? '#1A472A' : '#740001';
-                    btn.style.color = 'white';
-                }
-            });
-            
-            // Re-enable buttons when next question is shown
-            setTimeout(() => {
-                document.querySelectorAll('.option-btn').forEach(btn => {
-                    btn.disabled = false;
-                    btn.style.backgroundColor = '';
-                    btn.style.color = '';
-                });
-            }, 1000);
-        }
-        
-        // Complete the current stage
-        function completeStage() {
-            switch(gameState.currentStage) {
-                case 1:
-                    showScreen(screens.stage1Complete);
-                    break;
-                case 2:
-                    showScreen(screens.stage2Complete);
-                    break;
-                case 3:
-                    showScreen(screens.stage3Complete);
-                    break;
-                case 4:
-                    finalScore.textContent = `סיימת את המשחק עם ${gameState.totalCorrect} תשובות נכונות!`;
-                    showScreen(screens.win);
-                    break;
-            }
-        }
-        
-        // Reset the game
-        function resetGame() {
-            gameState
+                // אם הגענו לכאן, השא
