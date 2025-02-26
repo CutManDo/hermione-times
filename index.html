@@ -53,10 +53,6 @@
             margin-bottom: 10px;
         }
         
-        .voldemort-img {
-            border-color: #2A623D;
-        }
-        
         .question-container {
             background-color: #f8f3e6;
             padding: 15px;
@@ -144,47 +140,6 @@
             margin-bottom: 10px;
         }
         
-        /* סגנונות לשלב וולדמורט */
-        .voldemort-screen {
-            background-color: #0D0D0D;
-            color: #E0E0E0;
-        }
-        
-        .voldemort-screen .stage-title {
-            color: #2A623D;
-        }
-        
-        .voldemort-screen .question-container {
-            background-color: #1c1c1c;
-            color: #E0E0E0;
-        }
-        
-        .answer-input {
-            font-size: 18px;
-            padding: 12px;
-            border: 2px solid #2A623D;
-            border-radius: 8px;
-            text-align: center;
-            width: 120px;
-            margin: 15px auto;
-            display: block;
-        }
-        
-        .submit-btn {
-            background-color: #2A623D;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            padding: 12px 25px;
-            cursor: pointer;
-            font-size: 16px;
-            transition: all 0.3s;
-        }
-        
-        .submit-btn:hover {
-            background-color: #1D7551;
-        }
-        
         /* Responsive design */
         @media (max-width: 600px) {
             .options-container {
@@ -208,7 +163,7 @@
             <h2>ברוכים הבאים לעולם הקסום של לוח הכפל!</h2>
             <p class="stage-description">
                 הרמיוני צריכה את עזרתך כדי לעבור את האתגרים המתמטיים בהוגוורטס.
-                עזרי לה לענות על שאלות כפל ולסיים את כל חמשת השלבים!
+                עזרי לה לענות על שאלות כפל ולסיים את כל ארבעת השלבים!
             </p>
             <button id="start-btn" class="start-btn">התחילי במשחק!</button>
         </div>
@@ -256,18 +211,6 @@
             <button id="start-stage4-btn" class="start-btn">התחילי!</button>
         </div>
         
-        <!-- וולדמורט - שלב 5 - התוספת החדשה -->
-        <div id="stage5-intro" class="screen voldemort-screen">
-            <img src="images/lord.jpg" alt="וולדמורט" class="character-img voldemort-img">
-            <h2 class="stage-title">שלב 5: העימות הסופי</h2>
-            <p class="stage-description">
-                מי שלא יכולים לנקוב בשמו מאתגר אותך לקרב מוחות!
-                שלב זה הוא הקשה ביותר - עליך לפתור 5 תרגילי כפל ולהקליד את התוצאה המדויקת.
-                אין אפשרות לטעות!
-            </p>
-            <button id="start-stage5-btn" class="start-btn">התחילי!</button>
-        </div>
-        
         <!-- Stage Completion Screens -->
         <div id="stage1-complete" class="screen">
             <img src="images/hermione1.jpg" alt="הרמיוני" class="character-img">
@@ -296,21 +239,10 @@
             <h2 class="stage-title">הצלחת!</h2>
             <p class="stage-description">
                 יופי! הצלחת למצוא את חדר הנחיצות.
-                עכשיו מחכה לך האתגר הבא - קרב כישופים מול בלטריקס לסטריינג'!
+                עכשיו מחכה לך האתגר הגדול ביותר - קרב כישופים מול בלטריקס לסטריינג'!
                 זה יהיה קשה, אבל אנחנו מאמינים בך.
             </p>
             <button id="next-to-stage4-btn" class="next-btn">לשלב הבא</button>
-        </div>
-        
-        <div id="stage4-complete" class="screen">
-            <img src="images/hermione1.jpg" alt="הרמיוני" class="character-img">
-            <h2 class="stage-title">הצלחת!</h2>
-            <p class="stage-description">
-                כל הכבוד, הרמיוני! ניצחת את בלטריקס בקרב הכישופים.
-                אבל המשימה האחרונה והקשה ביותר עוד לפנייך -
-                עימות ישיר מול זה-שאין-לנקוב-בשמו!
-            </p>
-            <button id="next-to-stage5-btn" class="next-btn">לשלב הסופי</button>
         </div>
         
         <!-- Game Screens -->
@@ -334,32 +266,12 @@
             <div id="feedback" class="feedback"></div>
         </div>
         
-        <!-- וולדמורט Game Screen - התוספת החדשה -->
-        <div id="voldemort-game-screen" class="screen voldemort-screen">
-            <div>
-                <img src="images/lord.jpg" alt="וולדמורט" class="character-img voldemort-img">
-                <h2>וולדמורט</h2>
-            </div>
-            
-            <div class="progress-bar">
-                <div class="progress" id="voldemort-progress"></div>
-            </div>
-            
-            <div class="question-container">
-                <h3 id="voldemort-question-text">שאלה</h3>
-                <input type="number" id="answer-input" class="answer-input" placeholder="הקלידי תשובה">
-                <button id="submit-answer-btn" class="submit-btn">שלחי תשובה</button>
-            </div>
-            
-            <div id="voldemort-feedback" class="feedback"></div>
-        </div>
-        
         <!-- Final Screens -->
         <div id="win-screen" class="screen">
             <img src="images/Hermione.win.jpg" alt="הרמיוני מנצחת" class="character-img">
             <h2 class="stage-title">ניצחון מזהיר!</h2>
             <p class="stage-description">
-                כל הכבוד, הרמיוני! ניצחת את בלטריקס ואפילו את וולדמורט בקרב מוחות
+                כל הכבוד, הרמיוני! ניצחת את בלטריקס בקרב הכישופים
                 והוכחת שאת המכשפה החכמה ביותר בהוגוורטס!
                 אלבוס דמבלדור מעניק לך מחולל זמן, שמאפשר לך לחזור ולשחק שוב את המשחק מהתחלה!
             </p>
@@ -371,7 +283,7 @@
             <img src="images/hermione.lose.jpg" alt="הרמיוני מפסידה" class="character-img">
             <h2 class="stage-title">הפסדת בקרב...</h2>
             <p class="stage-description">
-                נראה שהיריב היה חזק מדי הפעם.
+                נראה שבלטריקס הייתה חזקה מדי הפעם.
                 אל דאגה, הרמיוני! את יכולה לנסות שוב ולהוכיח
                 שאת המכשפה החכמה ביותר בהוגוורטס!
             </p>
@@ -388,15 +300,12 @@
             totalCorrect: 0,
             questionsPerStage: 5,
             stage4Questions: 7,
-            stage5Questions: 5,
             lastQuestion: null,
-            currentVoldemortAnswer: 0,
             characters: [
                 { name: "הגברת השמנה", img: "images/fatlady.jpg" },
                 { name: "דראקו מאלפוי", img: "images/draco.jpg" },
                 { name: "חדר הנחיצות", img: "images/room.jpg" },
-                { name: "בלטריקס לסטריינג'", img: "images/bellatrix.jpg" },
-                { name: "וולדמורט", img: "images/lord.jpg" }
+                { name: "בלטריקס לסטריינג'", img: "images/bellatrix.jpg" }
             ]
         };
         
@@ -421,10 +330,6 @@
             startStage(4);
         };
         
-        document.getElementById('start-stage5-btn').onclick = function() {
-            startStage(5);
-        };
-        
         document.getElementById('next-to-stage2-btn').onclick = function() {
             showScreen('stage2-intro');
         };
@@ -437,27 +342,12 @@
             showScreen('stage4-intro');
         };
         
-        document.getElementById('next-to-stage5-btn').onclick = function() {
-            showScreen('stage5-intro');
-        };
-        
         document.getElementById('play-again-btn').onclick = function() {
             resetGame();
         };
         
         document.getElementById('try-again-btn').onclick = function() {
             resetGame();
-        };
-        
-        document.getElementById('submit-answer-btn').onclick = function() {
-            checkVoldemortAnswer();
-        };
-        
-        // טיפול בהקשת Enter בשדה התשובה
-        document.getElementById('answer-input').onkeypress = function(e) {
-            if (e.key === 'Enter') {
-                checkVoldemortAnswer();
-            }
         };
         
         // הצגת מסך ספציפי והסתרת השאר
@@ -476,18 +366,10 @@
             gameState.correctAnswers = 0;
             gameState.lastQuestion = null;
             
-            if (stage === 5) {
-                // שלב וולדמורט
-                updateVoldemortProgress();
-                generateVoldemortQuestion();
-                showScreen('voldemort-game-screen');
-            } else {
-                // שלבים רגילים
-                updateCharacterInfo();
-                updateProgress();
-                generateQuestion();
-                showScreen('game-screen');
-            }
+            updateCharacterInfo();
+            updateProgress();
+            generateQuestion();
+            showScreen('game-screen');
         }
         
         // עדכון מידע הדמות לפי השלב הנוכחי
@@ -502,12 +384,6 @@
             var requiredQuestions = gameState.currentStage === 4 ? gameState.stage4Questions : gameState.questionsPerStage;
             var progress = (gameState.correctAnswers / requiredQuestions) * 100;
             document.getElementById('stage-progress').style.width = progress + '%';
-        }
-        
-        // עדכון מד ההתקדמות לשלב וולדמורט
-        function updateVoldemortProgress() {
-            var progress = (gameState.correctAnswers / gameState.stage5Questions) * 100;
-            document.getElementById('voldemort-progress').style.width = progress + '%';
         }
         
         // פונקציה לבדיקה אם מספר הוא כפולה של 1 או 10
@@ -614,24 +490,97 @@
             document.getElementById('feedback').textContent = '';
         }
         
-        // יצירת שאלת כפל עבור שלב וולדמורט
-        function generateVoldemortQuestion() {
-            var num1, num2;
-            var isValidQuestion = false;
-            
-            // ניקוי שדה הקלט
-            document.getElementById('answer-input').value = '';
-            
-            // לולאה שתמשיך עד שתיווצר שאלה תקינה
-            while (!isValidQuestion) {
-                // שלב 5: קשה מאוד (מספרים 8-12)
-                num1 = Math.floor(Math.random() * 5) + 8;
-                num2 = Math.floor(Math.random() * 5) + 8;
+        // בדיקה אם התשובה נכונה
+        function checkAnswer(selectedAnswer, correctAnswer) {
+            if (selectedAnswer === correctAnswer) {
+                // תשובה נכונה
+                document.getElementById('feedback').textContent = 'נכון מאוד!';
+                document.getElementById('feedback').className = 'feedback correct';
+                gameState.correctAnswers++;
+                gameState.totalCorrect++;
+                updateProgress();
                 
-                // בדיקה אם השאלה היא כפולה של 1 או 10
-                if (isMultipleOf1Or10(num1) || isMultipleOf1Or10(num2)) {
-                    continue; // אם כן, נמשיך ללולאה הבאה וניצור שאלה חדשה
+                // בדיקה אם השלב הושלם
+                var requiredQuestions = gameState.currentStage === 4 ? gameState.stage4Questions : gameState.questionsPerStage;
+                if (gameState.correctAnswers >= requiredQuestions) {
+                    setTimeout(function() {
+                        completeStage();
+                    }, 1000);
+                } else {
+                    setTimeout(function() {
+                        generateQuestion();
+                    }, 1000);
                 }
+            } else {
+                // תשובה שגויה
+                document.getElementById('feedback').textContent = 'לא נכון... התשובה היא ' + correctAnswer;
+                document.getElementById('feedback').className = 'feedback wrong';
                 
-                // בדיקה אם השאלה זהה לשאלה הקודמת
-                var questionKey = num1
+                // בשלב 4, כל תשובה שגויה מסיימת את המשחק
+                if (gameState.currentStage === 4) {
+                    setTimeout(function() {
+                        showScreen('lose-screen');
+                    }, 1500);
+                } else {
+                    // בשלבים אחרים, איפוס ההתקדמות
+                    gameState.correctAnswers = 0;
+                    updateProgress();
+                    setTimeout(function() {
+                        generateQuestion();
+                    }, 1500);
+                }
+            }
+            
+            // השבתה זמנית של כל כפתורי האפשרויות
+            var optionButtons = document.querySelectorAll('.option-btn');
+            for (var i = 0; i < optionButtons.length; i++) {
+                optionButtons[i].disabled = true;
+                
+                // אם זהו הכפתור שנבחר, הוספת סימון ויזואלי
+                if (parseInt(optionButtons[i].getAttribute('data-value')) === selectedAnswer) {
+                    optionButtons[i].style.backgroundColor = selectedAnswer === correctAnswer ? '#1A472A' : '#740001';
+                    optionButtons[i].style.color = 'white';
+                }
+            }
+            
+            // הפעלה מחדש של הכפתורים כאשר מוצגת השאלה הבאה
+            setTimeout(function() {
+                for (var i = 0; i < optionButtons.length; i++) {
+                    optionButtons[i].disabled = false;
+                    optionButtons[i].style.backgroundColor = '';
+                    optionButtons[i].style.color = '';
+                }
+            }, 1000);
+        }
+        
+        // השלמת השלב הנוכחי
+        function completeStage() {
+            switch(gameState.currentStage) {
+                case 1:
+                    showScreen('stage1-complete');
+                    break;
+                case 2:
+                    showScreen('stage2-complete');
+                    break;
+                case 3:
+                    showScreen('stage3-complete');
+                    break;
+                case 4:
+                    document.getElementById('final-score').textContent = 'סיימת את המשחק עם ' + gameState.totalCorrect + ' תשובות נכונות!';
+                    showScreen('win-screen');
+                    break;
+            }
+        }
+        
+        // איפוס המשחק
+        function resetGame() {
+            gameState.currentStage = 0;
+            gameState.currentQuestion = 0;
+            gameState.correctAnswers = 0;
+            gameState.totalCorrect = 0;
+            gameState.lastQuestion = null;
+            showScreen('start-screen');
+        }
+    </script>
+</body>
+</html>
