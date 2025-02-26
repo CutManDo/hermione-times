@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>משחק לוח הכפל של הרמיוני</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5e6c8;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            text-align: center;
+            direction: rtl;
+        }
+        
+        #game-container {
+            background-color: #ffffff;
+            border-radius: 15px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+            padding: 20px;
+            max-width: 600px;
+            width: 90%;
+        }
+        
+        h1 {
+            color: #7F0909;
+            margin-bottom: 20px;
+        }
+        
+        .screen {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .visible {
+            display: flex;
+        }
+        
+        .character-img {
+            width: 150px;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 3px solid #D3A625;
+            margin-bottom: 10px;
+        }
+        
+        .question-container {
+            background-color: #f8f3e6;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 10px 0;
+            width: 100%;
+        }
+        
+        .options-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            width: 100%;
+        }
+        
+        .option-btn {
+            background-color: #740001;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 12px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+        
+        .option-btn:hover {
+            background-color: #9A1A13;
+        }
+        
+        .next-btn, .start-btn {
+            background-color: #D3A625;
+            color: #111111;
+            border: none;
+            border-radius: 8px;
+            padding: 12px 20px;
+            margin-top: 15px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+        
+        .next-btn:hover, .start-btn:hover {
+            background-color: #EEBA30;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 20px;
+            background-color: #e0e0e0;
+            border-radius: 10px;
+            margin: 15px 0;
+            overflow: hidden;
+        }
+        
+        .progress {
+            height: 100%;
+            background-color: #1A472A;
+            width: 0%;
+            transition: width 0.5s;
+        }
+        
+        .feedback {
+            font-weight: bold;
+            margin: 10px 0;
+            font-size: 18px;
+        }
+        
+        .correct {
+            color: #1A472A;
+        }
+        
+        .wrong {
+            color: #740001;
+        }
+        
+        .spell-effect {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 100;
+            display: none;
+        }
+        
+        @keyframes fadeOut {
+            from { opacity: 1; }
+            to { opacity: 0; }
+        }
+        
+        .stage-description {
+            font-size: 18px;
+            line-height: 1.6;
+        }
+        
+        .stage-title {
+            color: #7F0909;
+            margin-bottom: 10px;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 600px) {
+            .options-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .character-img {
+                width: 120px;
+                height: 120px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="game-container">
+        <h1>משחק לוח הכפל של הרמיוני</h1>
+        
+        <!-- Start Screen -->
+        <div id="start-screen" class="screen visible">
+            <img src="/api/placeholder/150/150" alt="הרמיוני" class="character-img">
+            <h2>ברוכים הבאים לעולם הקסום של לוח הכפל!</h2>
+            <p class="stage-description">
+                הרמיוני צריכה את עזרתך כדי לעבור את האתגרים המתמטיים בהוגוורטס.
+                עזרי לה לענות על שאלות כפל ולסיים את כל ארבעת השלבים!
+            </p>
+            <button id="start-game-btn" class="start-btn">התחילי במשחק!</button>
+        </div>
+        
+        <!-- Stage Intro Screens -->
+        <div id="stage1-intro" class="screen">
+            <img src="/api/placeholder/150/150" alt="הגברת השמנה" class="character-img">
+            <h2 class="stage-title">שלב 1: הכניסה למועדון גריפינדור</h2>
+            <p class="stage-description">
+                הרמיוני, עלייך לענות על 5 שאלות של הגברת השמנה בכדי להיכנס למועדון גריפינדור.
+                עליך לענות נכון על כל השאלות ברצף!
+            </p>
+            <button class="start-btn stage-start-btn" data-stage="1">התחילי!</button>
+        </div>
+        
+        <div id="stage2-intro" class="screen">
+            <img src="/api/placeholder/150/150" alt="דראקו מאלפוי" class="character-img">
+            <h2 class="stage-title">שלב 2: הגעה לשיעור שיקויים</h2>
+            <p class="stage-description">
+                עלייך להגיע בזמן לשיעור השיקויים של סנייפ.
+                אבל דראקו מאלפוי מנסה לעכב אותך בשאלות מלכודת.
+                עני נכון על 5 שאלות ברצף כדי להגיע בזמן לשיעור!
+            </p>
+            <button class="start-btn stage-start-btn" data-stage="2">התחילי!</button>
+        </div>
+        
+        <div id="stage3-intro" class="screen">
+            <img src="/api/placeholder/150/150" alt="חדר הנחיצות" class="character-img">
+            <h2 class="stage-title">שלב 3: חדר הנחיצות</h2>
+            <p class="stage-description">
+                עלייך לענות על 5 שאלות נכונות ברצף כדי להיכנס לחדר הנחיצות.
+                מתקיימת שם עכשיו פגישה גורלית!
+            </p>
+            <button class="start-btn stage-start-btn" data-stage="3">התחילי!</button>
+        </div>
+        
+        <div id="stage4-intro" class="screen">
+            <img src="/api/placeholder/150/150" alt="בלטריקס לסטריינג'" class="character-img">
+            <h2 class="stage-title">שלב 4: קרב הכישופים</h2>
+            <p class="stage-description">
+                בלטריקס לסטריינג' מאתגרת אותך לקרב כישופים!
+                זהו השלב הקשה ביותר - עליך לענות על 7 שאלות קשות.
+                שימי לב - אם תטעי אפילו פעם אחת, תפסידי את המשחק!
+            </p>
+            <button class="start-btn stage-start-btn" data-stage="4">התחילי!</button>
+        </div>
+        
+        <!-- Stage Completion Screens -->
+        <div id="stage1-complete" class="screen">
+            <img src="/api/placeholder/150/150" alt="הרמיוני" class="character-img">
+            <h2 class="stage-title">הצלחת!</h2>
+            <p class="stage-description">
+                נפלא! הגברת השמנה התרשמה מהידע שלך ונתנה לך להיכנס למועדון גריפינדור.
+                בשלב הבא, עלייך להגיע בזמן לשיעור השיקויים של סנייפ.
+                אבל דראקו ינסה לעכב אותך בשאלות קשות!
+            </p>
+            <button class="next-btn">לשלב הבא</button>
+        </div>
+        
+        <div id="stage2-complete" class="screen">
+            <img src="/api/placeholder/150/150" alt="הרמיוני" class="character-img">
+            <h2 class="stage-title">הצלחת!</h2>
+            <p class="stage-description">
+                מצוין! הצלחת לענות על כל השאלות של דראקו והקדמת ב5 דקות לשיעור השיקויים.
+                פרופסור סנייפ העניק לך ציון 100!
+                עכשיו, עלייך למצוא את חדר הנחיצות.
+            </p>
+            <button class="next-btn">לשלב הבא</button>
+        </div>
+        
+        <div id="stage3-complete" class="screen">
+            <img src="/api/placeholder/150/150" alt="הרמיוני" class="character-img">
+            <h2 class="stage-title">הצלחת!</h2>
+            <p class="stage-description">
+                יופי! הצלחת למצוא את חדר הנחיצות.
+                עכשיו מחכה לך האתגר הגדול ביותר - קרב כישופים מול בלטריקס לסטריינג'!
+                זה יהיה קשה, אבל אנחנו מאמינים בך.
+            </p>
+            <button class="next-btn">לשלב הבא</button>
+        </div>
+        
+        <!-- Game Screens -->
+        <div id="game-screen" class="screen">
+            <div id="character-info">
+                <img id="current-character-img" src="/api/placeholder/150/150" alt="דמות" class="character-img">
+                <h2 id="character-name">הגברת השמנה</h2>
+            </div>
+            
+            <div class="progress-bar">
+                <div class="progress" id="stage-progress"></div>
+            </div>
+            
+            <div class="question-container">
+                <h3 id="question-text">שאלה</h3>
+                <div class="options-container" id="options">
+                    <!-- Options will be added here -->
+                </div>
+            </div>
+            
+            <div id="feedback" class="feedback"></div>
+        </div>
+        
+        <!-- Final Screens -->
+        <div id="win-screen" class="screen">
+            <img src="/api/placeholder/150/150" alt="הרמיוני מנצחת" class="character-img">
+            <h2 class="stage-title">ניצחון מזהיר!</h2>
+            <p class="stage-description">
+                כל הכבוד, הרמיוני! ניצחת את בלטריקס בקרב הכישופים
+                והוכחת שאת המכשפה החכמה ביותר בהוגוורטס!
+                אלבוס דמבלדור מעניק לך מחולל זמן, שמאפשר לך לחזור ולשחק שוב את המשחק מהתחלה!
+            </p>
+            <p id="final-score"></p>
+            <button id="play-again-btn" class="start-btn">שחקי שוב!</button>
+        </div>
+        
+        <div id="lose-screen" class="screen">
+            <img src="/api/placeholder/150/150" alt="הרמיוני מפסידה" class="character-img">
+            <h2 class="stage-title">הפסדת בקרב...</h2>
+            <p class="stage-description">
+                נראה שבלטריקס הייתה חזקה מדי הפעם.
+                אל דאגה, הרמיוני! את יכולה לנסות שוב ולהוכיח
+                שאת המכשפה החכמה ביותר בהוגוורטס!
+            </p>
+            <button id="try-again-btn" class="start-btn">נסי שוב!</button>
+        </div>
+    </div>
+    
+    <script>
+        // Game state
+        const gameState = {
+            currentStage: 0,
+            currentQuestion: 0,
+            correctAnswers: 0,
+            totalCorrect: 0,
+            questionsPerStage: 5,
+            stage4Questions: 7,
+            characters: [
+                { name: "הגברת השמנה", img: "/api/placeholder/150/150" },
+                { name: "דראקו מאלפוי", img: "/api/placeholder/150/150" },
+                { name: "חדר הנחיצות", img: "/api/placeholder/150/150" },
+                { name: "בלטריקס לסטריינג'", img: "/api/placeholder/150/150" }
+            ]
+        };
+        
+        // Get references to all screens
+        const screens = {
+            start: document.getElementById('start-screen'),
+            stage1Intro: document.getElementById('stage1-intro'),
+            stage2Intro: document.getElementById('stage2-intro'),
+            stage3Intro: document.getElementById('stage3-intro'),
+            stage4Intro: document.getElementById('stage4-intro'),
+            stage1Complete: document.getElementById('stage1-complete'),
+            stage2Complete: document.getElementById('stage2-complete'),
+            stage3Complete: document.getElementById('stage3-complete'),
+            game: document.getElementById('game-screen'),
+            win: document.getElementById('win-screen'),
+            lose: document.getElementById('lose-screen')
+        };
+        
+        // Get references to other elements
+        const characterImg = document.getElementById('current-character-img');
+        const characterName = document.getElementById('character-name');
+        const questionText = document.getElementById('question-text');
+        const optionsContainer = document.getElementById('options');
+        const feedback = document.getElementById('feedback');
+        const progressBar = document.getElementById('stage-progress');
+        const finalScore = document.getElementById('final-score');
+        
+        // Add event listeners
+        document.getElementById('start-game-btn').addEventListener('click', startStage1Intro);
+        document.querySelectorAll('.stage-start-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const stage = parseInt(btn.dataset.stage);
+                startStage(stage);
+            });
+        });
+        
+        document.querySelectorAll('.next-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                gameState.currentStage++;
+                showNextStageIntro();
+            });
+        });
+        
+        document.getElementById('play-again-btn').addEventListener('click', resetGame);
+        document.getElementById('try-again-btn').addEventListener('click', resetGame);
+        
+        // Function to show a specific screen and hide all others
+        function showScreen(screenToShow) {
+            Object.values(screens).forEach(screen => {
+                screen.classList.remove('visible');
+            });
+            screenToShow.classList.add('visible');
+        }
+        
+        // Start stage 1 intro
+        function startStage1Intro() {
+            showScreen(screens.stage1Intro);
+        }
+        
+        // Show next stage intro based on current stage
+        function showNextStageIntro() {
+            switch(gameState.currentStage) {
+                case 1:
+                    showScreen(screens.stage1Intro);
+                    break;
+                case 2:
+                    showScreen(screens.stage2Intro);
+                    break;
+                case 3:
+                    showScreen(screens.stage3Intro);
+                    break;
+                case 4:
+                    showScreen(screens.stage4Intro);
+                    break;
+            }
+        }
+        
+        // Start a specific stage
+        function startStage(stage) {
+            gameState.currentStage = stage;
+            gameState.currentQuestion = 0;
+            gameState.correctAnswers = 0;
+            
+            updateCharacterInfo();
+            updateProgress();
+            generateQuestion();
+            showScreen(screens.game);
+        }
+        
+        // Update character info based on current stage
+        function updateCharacterInfo() {
+            const character = gameState.characters[gameState.currentStage - 1];
+            characterImg.src = character.img;
+            characterName.textContent = character.name;
+        }
+        
+        // Update progress bar
+        function updateProgress() {
+            const requiredQuestions = gameState.currentStage === 4 ? gameState.stage4Questions : gameState.questionsPerStage;
+            const progress = (gameState.correctAnswers / requiredQuestions) * 100;
+            progressBar.style.width = `${progress}%`;
+        }
+        
+        // Generate a multiplication question based on the current stage
+        function generateQuestion() {
+            let num1, num2;
+            
+            // Adjust difficulty based on stage
+            switch(gameState.currentStage) {
+                case 1: // Stage 1: Easy (numbers 1-5)
+                    num1 = Math.floor(Math.random() * 5) + 1;
+                    num2 = Math.floor(Math.random() * 5) + 1;
+                    break;
+                case 2: // Stage 2: Medium (numbers 2-7)
+                    num1 = Math.floor(Math.random() * 6) + 2;
+                    num2 = Math.floor(Math.random() * 6) + 2;
+                    break;
+                case 3: // Stage 3: Hardest (numbers 6-10) - Same as stage 4
+                    num1 = Math.floor(Math.random() * 5) + 6;
+                    num2 = Math.floor(Math.random() * 5) + 6;
+                    break;
+                case 4: // Stage 4: Hardest (numbers 6-10)
+                    num1 = Math.floor(Math.random() * 5) + 6;
+                    num2 = Math.floor(Math.random() * 5) + 6;
+                    break;
+            }
+            
+            const correctAnswer = num1 * num2;
+            
+            // Create answer options (including the correct one)
+            const options = [correctAnswer];
+            
+            // Add 3 incorrect options
+            while (options.length < 4) {
+                let wrong;
+                if (gameState.currentStage === 4) {
+                    // More challenging wrong answers for stage 4
+                    const operation = Math.random() < 0.5 ? '+' : '-';
+                    const diff = Math.floor(Math.random() * 3) + 1;
+                    wrong = operation === '+' ? correctAnswer + diff : correctAnswer - diff;
+                } else {
+                    wrong = Math.floor(Math.random() * 20) + (correctAnswer - 10);
+                    // Ensure wrong answers are positive and not equal to the correct answer
+                    if (wrong <= 0 || wrong === correctAnswer) {
+                        wrong = correctAnswer + Math.floor(Math.random() * 5) + 1;
+                    }
+                }
+                
+                if (!options.includes(wrong)) {
+                    options.push(wrong);
+                }
+            }
+            
+            // Shuffle options
+            const shuffledOptions = options.sort(() => Math.random() - 0.5);
+            
+            // Update the UI
+            questionText.textContent = `כמה זה ${num1} × ${num2}?`;
+            optionsContainer.innerHTML = '';
+            
+            shuffledOptions.forEach(option => {
+                const button = document.createElement('button');
+                button.classList.add('option-btn');
+                button.textContent = option;
+                button.addEventListener('click', () => checkAnswer(option, correctAnswer));
+                optionsContainer.appendChild(button);
+            });
+            
+            feedback.textContent = '';
+        }
+        
+        // Check if the answer is correct
+        function checkAnswer(selectedAnswer, correctAnswer) {
+            if (selectedAnswer === correctAnswer) {
+                // Correct answer
+                feedback.textContent = 'נכון מאוד!';
+                feedback.className = 'feedback correct';
+                gameState.correctAnswers++;
+                gameState.totalCorrect++;
+                updateProgress();
+                
+                // Check if stage is complete
+                const requiredQuestions = gameState.currentStage === 4 ? gameState.stage4Questions : gameState.questionsPerStage;
+                if (gameState.correctAnswers >= requiredQuestions) {
+                    setTimeout(() => {
+                        completeStage();
+                    }, 1000);
+                } else {
+                    setTimeout(() => {
+                        generateQuestion();
+                    }, 1000);
+                }
+            } else {
+                // Wrong answer
+                feedback.textContent = `לא נכון... התשובה היא ${correctAnswer}`;
+                feedback.className = 'feedback wrong';
+                
+                // In stage 4, any wrong answer ends the game
+                if (gameState.currentStage === 4) {
+                    setTimeout(() => {
+                        showScreen(screens.lose);
+                    }, 1500);
+                } else {
+                    // In other stages, reset progress
+                    gameState.correctAnswers = 0;
+                    updateProgress();
+                    setTimeout(() => {
+                        generateQuestion();
+                    }, 1500);
+                }
+            }
+            
+            // Disable all option buttons temporarily
+            document.querySelectorAll('.option-btn').forEach(btn => {
+                btn.disabled = true;
+                
+                // If this is the selected button, add visual indication
+                if (parseInt(btn.textContent) === selectedAnswer) {
+                    btn.style.backgroundColor = selectedAnswer === correctAnswer ? '#1A472A' : '#740001';
+                    btn.style.color = 'white';
+                }
+            });
+            
+            // Re-enable buttons when next question is shown
+            setTimeout(() => {
+                document.querySelectorAll('.option-btn').forEach(btn => {
+                    btn.disabled = false;
+                    btn.style.backgroundColor = '';
+                    btn.style.color = '';
+                });
+            }, 1000);
+        }
+        
+        // Complete the current stage
+        function completeStage() {
+            switch(gameState.currentStage) {
+                case 1:
+                    showScreen(screens.stage1Complete);
+                    break;
+                case 2:
+                    showScreen(screens.stage2Complete);
+                    break;
+                case 3:
+                    showScreen(screens.stage3Complete);
+                    break;
+                case 4:
+                    finalScore.textContent = `סיימת את המשחק עם ${gameState.totalCorrect} תשובות נכונות!`;
+                    showScreen(screens.win);
+                    break;
+            }
+        }
+        
+        // Reset the game
+        function resetGame() {
+            gameState.currentStage = 0;
+            gameState.currentQuestion = 0;
+            gameState.correctAnswers = 0;
+            gameState.totalCorrect = 0;
+            showScreen(screens.start);
+        }
+    </script>
+</body>
+</html>
