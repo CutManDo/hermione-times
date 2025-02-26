@@ -314,6 +314,7 @@
             totalCorrect: 0,
             questionsPerStage: 5,
             stage4Questions: 7,
+            lastQuestion: null, // משתנה חדש לשמירת השאלה האחרונה
             characters: [
                 { name: "הגברת השמנה", img: "images/fatlady.jpg" },
                 { name: "דראקו מאלפוי", img: "images/draco.jpg" },
@@ -401,6 +402,7 @@
             gameState.currentStage = stage;
             gameState.currentQuestion = 0;
             gameState.correctAnswers = 0;
+            gameState.lastQuestion = null; // איפוס השאלה האחרונה בתחילת שלב חדש
             
             updateCharacterInfo();
             updateProgress();
@@ -422,28 +424,55 @@
             progressBar.style.width = `${progress}%`;
         }
         
+        // פונקציה חדשה לבדיקה אם מספר הוא כפולה של 1 או 10
+        function isMultipleOf1Or10(num) {
+            return num === 1 || num === 10 || num % 10 === 0;
+        }
+        
         // Generate a multiplication question based on the current stage
         function generateQuestion() {
             let num1, num2;
+            let isValidQuestion = false;
             
-            // Adjust difficulty based on stage
-            switch(gameState.currentStage) {
-                case 1: // Stage 1: Easy (numbers 1-5)
-                    num1 = Math.floor(Math.random() * 5) + 1;
-                    num2 = Math.floor(Math.random() * 5) + 1;
-                    break;
-                case 2: // Stage 2: Medium (numbers 2-7)
-                    num1 = Math.floor(Math.random() * 6) + 2;
-                    num2 = Math.floor(Math.random() * 6) + 2;
-                    break;
-                case 3: // Stage 3: Hardest (numbers 6-10) - Same as stage 4
-                    num1 = Math.floor(Math.random() * 5) + 6;
-                    num2 = Math.floor(Math.random() * 5) + 6;
-                    break;
-                case 4: // Stage 4: Hardest (numbers 6-10)
-                    num1 = Math.floor(Math.random() * 5) + 6;
-                    num2 = Math.floor(Math.random() * 5) + 6;
-                    break;
+            // לולאה שתמשיך עד שתיווצר שאלה תקינה
+            while (!isValidQuestion) {
+                // Adjust difficulty based on stage
+                switch(gameState.currentStage) {
+                    case 1: // Stage 1: Easy (numbers 1-5)
+                        num1 = Math.floor(Math.random() * 5) + 1;
+                        num2 = Math.floor(Math.random() * 5) + 1;
+                        break;
+                    case 2: // Stage 2: Medium (numbers 2-7)
+                        num1 = Math.floor(Math.random() * 6) + 2;
+                        num2 = Math.floor(Math.random() * 6) + 2;
+                        break;
+                    case 3: // Stage 3: Hardest (numbers 6-10) - Same as stage 4
+                        num1 = Math.floor(Math.random() * 5) + 6;
+                        num2 = Math.floor(Math.random() * 5) + 6;
+                        break;
+                    case 4: // Stage 4: Hardest (numbers 6-10)
+                        num1 = Math.floor(Math.random() * 5) + 6;
+                        num2 = Math.floor(Math.random() * 5) + 6;
+                        break;
+                }
+                
+                // בדיקה אם השאלה היא כפולה של 1 או 10
+                if (isMultipleOf1Or10(num1) || isMultipleOf1Or10(num2)) {
+                    continue; // אם כן, נמשיך ללולאה הבאה וניצור שאלה חדשה
+                }
+                
+                // בדיקה אם השאלה זהה לשאלה הקודמת
+                const questionKey = `${num1}x${num2}`;
+                const reverseKey = `${num2}x${num1}`;
+                
+                if (gameState.lastQuestion === questionKey || gameState.lastQuestion === reverseKey) {
+                    continue; // אם כן, נמשיך ללולאה הבאה וניצור שאלה חדשה
+                }
+                
+                // אם הגענו לכאן, השאלה תקינה
+                isValidQuestion = true;
+                // שמירת השאלה הנוכחית כשאלה האחרונה לסיבוב הבא
+                gameState.lastQuestion = questionKey;
             }
             
             const correctAnswer = num1 * num2;
@@ -454,8 +483,8 @@
             // Add 3 incorrect options
             while (options.length < 4) {
                 let wrong;
-                if (gameState.currentStage === 4) {
-                    // More challenging wrong answers for stage 4
+                if (gameState.currentStage >= 3) { // שלב 3 ו-4 משתמשים באותה רמת קושי של תשובות שגויות
+                    // More challenging wrong answers for stage 3 and 4
                     const operation = Math.random() < 0.5 ? '+' : '-';
                     const diff = Math.floor(Math.random() * 3) + 1;
                     wrong = operation === '+' ? correctAnswer + diff : correctAnswer - diff;
@@ -573,12 +602,4 @@
         
         // Reset the game
         function resetGame() {
-            gameState.currentStage = 0;
-            gameState.currentQuestion = 0;
-            gameState.correctAnswers = 0;
-            gameState.totalCorrect = 0;
-            showScreen(screens.start);
-        }
-    </script>
-</body>
-</html>
+            gameState
