@@ -81,19 +81,10 @@
             cursor: pointer;
             font-size: 16px;
             transition: all 0.3s;
-            -webkit-appearance: none;
-            -moz-appearance: none;
-            appearance: none;
-            user-select: none;
-            -webkit-user-select: none;
         }
         
         .option-btn:hover {
             background-color: #9A1A13;
-        }
-        
-        .option-btn:active {
-            transform: scale(0.98);
         }
         
         .next-btn, .start-btn {
@@ -107,19 +98,10 @@
             font-size: 16px;
             font-weight: bold;
             transition: all 0.3s;
-            -webkit-appearance: none;
-            -moz-appearance: none;
-            appearance: none;
-            user-select: none;
-            -webkit-user-select: none;
         }
         
         .next-btn:hover, .start-btn:hover {
             background-color: #EEBA30;
-        }
-        
-        .next-btn:active, .start-btn:active {
-            transform: scale(0.98);
         }
         
         /* סגנון לשדה הזנת מספר */
@@ -143,17 +125,10 @@
             cursor: pointer;
             font-size: 16px;
             transition: all 0.3s;
-            -webkit-appearance: none;
-            -moz-appearance: none;
-            appearance: none;
         }
         
         .submit-btn:hover {
             background-color: #1D7551;
-        }
-        
-        .submit-btn:active {
-            transform: scale(0.98);
         }
         
         .progress-bar {
@@ -398,7 +373,7 @@
         
         <!-- Final Screens -->
         <div id="win-screen" class="screen">
-            <img src="images/hermione.win.jpg" alt="הרמיוני מנצחת" class="character-img">
+            <img src="images/Hermione.win.jpg" alt="הרמיוני מנצחת" class="character-img">
             <h2 class="stage-title">ניצחון מזהיר!</h2>
             <p class="stage-description">
                 כל הכבוד, הרמיוני! ניצחת את בלטריקס ואפילו את וולדמורט בקרב מוחות
@@ -422,6 +397,43 @@
     </div>
     
     <script>
+        // טיפול בכפתור פתיחה
+        document.getElementById('start-game-btn').onclick = function() {
+            startStage1Intro();
+        };
+
+        // טיפול בכפתורי התחלת שלב
+        var stageButtons = document.querySelectorAll('.stage-start-btn');
+        for (var i = 0; i < stageButtons.length; i++) {
+            stageButtons[i].onclick = function() {
+                var stage = parseInt(this.getAttribute('data-stage'));
+                startStage(stage);
+            };
+        }
+
+        // טיפול בכפתורי המשך לשלב הבא
+        var nextButtons = document.querySelectorAll('.next-btn');
+        for (var i = 0; i < nextButtons.length; i++) {
+            nextButtons[i].onclick = function() {
+                gameState.currentStage++;
+                showNextStageIntro();
+            };
+        }
+
+        // טיפול בכפתורי שחק שוב
+        document.getElementById('play-again-btn').onclick = resetGame;
+        document.getElementById('try-again-btn').onclick = resetGame;
+
+        // טיפול בכפתור שליחת תשובה בשלב וולדמורט
+        document.getElementById('submit-answer').onclick = checkVoldemortAnswer;
+        
+        // טיפול בהקשת Enter בשדה הקלדת תשובה
+        document.getElementById('answer-input').onkeypress = function(e) {
+            if (e.key === 'Enter') {
+                checkVoldemortAnswer();
+            }
+        };
+        
         // Game state
         const gameState = {
             currentStage: 0,
@@ -432,6 +444,7 @@
             stage4Questions: 7,
             stage5Questions: 5,
             lastQuestion: null, // משתנה לשמירת השאלה האחרונה
+            voldemortQuestion: { num1: 0, num2: 0, answer: 0 }, // שמירת שאלת וולדמורט הנוכחית
             characters: [
                 { name: "הגברת השמנה", img: "images/fatlady.jpg" },
                 { name: "דראקו מאלפוי", img: "images/draco.jpg" },
@@ -466,95 +479,11 @@
         const voldemortQuestionText = document.getElementById('voldemort-question-text');
         const optionsContainer = document.getElementById('options');
         const answerInput = document.getElementById('answer-input');
-        const submitAnswerBtn = document.getElementById('submit-answer');
         const feedback = document.getElementById('feedback');
         const voldemortFeedback = document.getElementById('voldemort-feedback');
         const progressBar = document.getElementById('stage-progress');
         const voldemortProgressBar = document.getElementById('voldemort-stage-progress');
         const finalScore = document.getElementById('final-score');
-        
-        // Add event listeners - improved for better cross-browser compatibility
-        document.addEventListener('DOMContentLoaded', function() {
-            // טיפול בכפתור הפתיחה
-            const startGameBtn = document.getElementById('start-game-btn');
-            if (startGameBtn) {
-                startGameBtn.addEventListener('click', function(e) {
-                    startStage1Intro();
-                });
-                
-                startGameBtn.addEventListener('touchstart', function(e) {
-                    e.preventDefault();
-                    startStage1Intro();
-                });
-            }
-            
-            // טיפול בכפתורי התחלת שלב
-            document.querySelectorAll('.stage-start-btn').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    const stage = parseInt(this.dataset.stage);
-                    startStage(stage);
-                });
-                
-                btn.addEventListener('touchstart', function(e) {
-                    e.preventDefault();
-                    const stage = parseInt(this.dataset.stage);
-                    startStage(stage);
-                });
-            });
-            
-            // טיפול בכפתורי המשך לשלב הבא
-            document.querySelectorAll('.next-btn').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    gameState.currentStage++;
-                    showNextStageIntro();
-                });
-                
-                btn.addEventListener('touchstart', function(e) {
-                    e.preventDefault();
-                    gameState.currentStage++;
-                    showNextStageIntro();
-                });
-            });
-            
-            // טיפול בכפתורי ניסיון חוזר
-            const playAgainBtn = document.getElementById('play-again-btn');
-            if (playAgainBtn) {
-                playAgainBtn.addEventListener('click', resetGame);
-                playAgainBtn.addEventListener('touchstart', function(e) {
-                    e.preventDefault();
-                    resetGame();
-                });
-            }
-            
-            const tryAgainBtn = document.getElementById('try-again-btn');
-            if (tryAgainBtn) {
-                tryAgainBtn.addEventListener('click', resetGame);
-                tryAgainBtn.addEventListener('touchstart', function(e) {
-                    e.preventDefault();
-                    resetGame();
-                });
-            }
-            
-            // טיפול בכפתור שליחת תשובה לוולדמורט
-            const submitAnswer = document.getElementById('submit-answer');
-            if (submitAnswer) {
-                submitAnswer.addEventListener('click', checkVoldemortAnswer);
-                submitAnswer.addEventListener('touchstart', function(e) {
-                    e.preventDefault();
-                    checkVoldemortAnswer();
-                });
-            }
-            
-            // טיפול בהקשת Enter בשדה התשובה של וולדמורט
-            const answerInputField = document.getElementById('answer-input');
-            if (answerInputField) {
-                answerInputField.addEventListener('keypress', function(e) {
-                    if (e.key === 'Enter') {
-                        checkVoldemortAnswer();
-                    }
-                });
-            }
-        });
         
         // Function to show a specific screen and hide all others
         function showScreen(screenToShow) {
@@ -676,4 +605,61 @@
                     continue; // אם כן, נמשיך ללולאה הבאה וניצור שאלה חדשה
                 }
                 
-                // אם הגענו לכאן, השא
+                // אם הגענו לכאן, השאלה תקינה
+                isValidQuestion = true;
+                // שמירת השאלה הנוכחית כשאלה האחרונה לסיבוב הבא
+                gameState.lastQuestion = questionKey;
+            }
+            
+            const correctAnswer = num1 * num2;
+            
+            // Create answer options (including the correct one)
+            const options = [correctAnswer];
+            
+            // Add 3 incorrect options
+            while (options.length < 4) {
+                let wrong;
+                if (gameState.currentStage >= 3) { // שלב 3 ו-4 משתמשים באותה רמת קושי של תשובות שגויות
+                    // More challenging wrong answers for stage 3 and 4
+                    const operation = Math.random() < 0.5 ? '+' : '-';
+                    const diff = Math.floor(Math.random() * 3) + 1;
+                    wrong = operation === '+' ? correctAnswer + diff : correctAnswer - diff;
+                } else {
+                    wrong = Math.floor(Math.random() * 20) + (correctAnswer - 10);
+                    // Ensure wrong answers are positive and not equal to the correct answer
+                    if (wrong <= 0 || wrong === correctAnswer) {
+                        wrong = correctAnswer + Math.floor(Math.random() * 5) + 1;
+                    }
+                }
+                
+                if (!options.includes(wrong)) {
+                    options.push(wrong);
+                }
+            }
+            
+            // Shuffle options
+            const shuffledOptions = options.sort(() => Math.random() - 0.5);
+            
+            // Update the UI
+            questionText.textContent = `כמה זה ${num1} × ${num2}?`;
+            optionsContainer.innerHTML = '';
+            
+            shuffledOptions.forEach(option => {
+                const button = document.createElement('button');
+                button.classList.add('option-btn');
+                button.textContent = option;
+                button.onclick = function() {
+                    checkAnswer(option, correctAnswer);
+                };
+                optionsContainer.appendChild(button);
+            });
+            
+            feedback.textContent = '';
+        }
+        
+        // יצירת שאלה לשלב וולדמורט
+        function generateVoldemortQuestion() {
+            let num1, num2;
+            let isValidQuestion = false;
+            
+            // לולאה שתמשיך עד שת
